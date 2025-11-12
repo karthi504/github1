@@ -1,0 +1,27 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  name: Default   # Your self-hosted agent pool name
+
+steps:
+- task: PowerShell@2
+  displayName: 'Connect and Export using SQLcl'
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Set TNS_ADMIN to point to your wallet directory (no need to include the sqlcl\bin part)
+      $env:TNS_ADMIN = "C:\Users\KarthikeyanM\APEX CICD\Wallet_FOURAAIDB"
+
+      # Change directory to where sql.exe is located
+      cd "C:\Users\KarthikeyanM\Downloads\sqlcl-25.1.1.113.2054\sqlcl\bin"
+
+      # Run SQLcl connection (note the quotes to safely wrap credentials)
+      .\sql.exe "apex_dev/Fusion#12345@fouraaidb_high"
